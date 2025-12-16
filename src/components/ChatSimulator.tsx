@@ -139,7 +139,11 @@ export default function ChatSimulator() {
     setAnswers(updatedAnswers);
     setInput("");
     if (detectRisk(text)) setRiskFlag(true);
-    await callAi(text, step.id, updatedAnswers, step.prompt);
+    const aiReply = await callAi(text, step.id, updatedAnswers, step.prompt);
+    // Se a IA pediu mais detalhes (normalmente em forma de pergunta), nao avancar.
+    if (aiReply && aiReply.includes("?")) {
+      return;
+    }
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
     if (nextStep < steps.length) {
@@ -180,7 +184,10 @@ export default function ChatSimulator() {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.message || "Erro na IA");
-      if (json.reply) pushMessage({ from: "ai", text: json.reply });
+      if (json.reply) {
+        pushMessage({ from: "ai", text: json.reply });
+        return json.reply as string;
+      }
     } catch (error) {
       console.error(error);
       pushMessage({
@@ -190,6 +197,7 @@ export default function ChatSimulator() {
     } finally {
       setAiLoading(false);
     }
+    return undefined;
   }
 
   function summary() {
