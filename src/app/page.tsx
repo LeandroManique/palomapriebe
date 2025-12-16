@@ -207,7 +207,7 @@ export default function Home() {
                 ))}
               </ul>
               <div className={styles.planActions}>
-                <Link className={styles.primaryGhost} href={plan.checkoutLabel}>
+                <Link className={styles.primaryGhost} href="#chat">
                   Comecar agora
                 </Link>
               </div>

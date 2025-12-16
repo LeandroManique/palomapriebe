@@ -360,8 +360,10 @@
   border: 1px solid var(--stroke);
   border-radius: 18px;
   padding: 18px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
+  height: 100%;
 }
 
 .planCardFeatured {
@@ -394,8 +396,11 @@
 }
 
 .planActions {
-  display: flex;
-  justify-content: flex-start;
+  margin-top: auto;
+}
+.planActions a {
+  width: 100%;
+  text-align: center;
 }
 
 .chatLayout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; max-width: 760px; margin: 0 auto; }
@@ -528,5 +533,4 @@
     flex-direction: column;
   }
 }
-
 

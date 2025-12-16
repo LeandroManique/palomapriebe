@@ -280,7 +280,7 @@ export default function ChatSimulator() {
         )}
         {aiLoading && (
           <div className={`${styles.message} ${styles.ai}`}>
-            <span className={styles.aiTyping}>Paloma analisando...</span>
+            <span className={styles.aiTyping}>Assistente da Paloma analisando...</span>
           </div>
         )}
       </div>
