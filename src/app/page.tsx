@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import ChatSimulator from "@/components/ChatSimulator";
 import styles from "./page.module.css";
 
 const methodQuick = [
@@ -11,54 +10,54 @@ const methodQuick = [
 ];
 
 const howSteps = [
-  { title: "Fale comigo", text: "Chat rapido (4-6 min) no seu idioma." },
-  { title: "Revisao humana", text: "Paloma aplica o Metodo 30 ao seu caso." },
-  { title: "Comece seguro", text: "Plano aprovado; WhatsApp so para alunos ativos." },
+  { title: "Escolha o plano", text: "Selecione o nivel de acompanhamento que encaixa na sua rotina." },
+  { title: "Fale com a Paloma", text: "Ela faz a anamnese completa e monta o plano com o Metodo 30." },
+  { title: "Receba e ajuste", text: "Plano liberado, suporte pelo WhatsApp e sessoes ao vivo conforme o plano." },
 ];
 
 const plans = [
   {
-    name: "Impulso – 1 mes",
+    name: "Impulso - 1 mes",
     highlight: "Treino personalizado em 30 min adaptado a voce",
     bullets: [
       "Anamnese completa (historico, rotina, restricoes)",
       "1 plano de treino personalizado",
-      "Suporte WhatsApp seg–sex, 7h as 20h",
+      "Suporte WhatsApp seg-sex, 7h as 20h",
     ],
     price: "R$ 347",
     checkoutLabel: "https://pay.kiwify.com.br/aDkvKsP",
   },
   {
-    name: "Transformacao – 3 meses",
+    name: "Transformacao - 3 meses",
     highlight: "Evolucao mensal com ajuste fino ao vivo",
     bullets: [
       "Anamnese inicial",
       "3 planos mensais ajustados conforme evolucao",
-      "Suporte WhatsApp seg–sex, 7h as 20h",
+      "Suporte WhatsApp seg-sex, 7h as 20h",
       "Bonus: 1 sessao ao vivo de 20 min",
     ],
     price: "R$ 897",
     checkoutLabel: "https://pay.kiwify.com.br/ip9vDaA",
   },
   {
-    name: "Ano de Resultados – 12 meses",
+    name: "Ano de Resultados - 12 meses",
     highlight: "12 planos mensais com revisao constante",
     bullets: [
       "12 planos mensais (ciclos trimestrais)",
       "1 videochamada ao vivo por mes (20 min)",
-      "Suporte WhatsApp seg–sex, 7h as 20h",
+      "Suporte WhatsApp seg-sex, 7h as 20h",
       "Bonus: 1 sessao extra ao vivo (20 min)",
     ],
     price: "R$ 2.988",
     checkoutLabel: "https://pay.kiwify.com.br/VSlcZbV",
   },
   {
-    name: "Mentoria Premium – 12 meses",
+    name: "Mentoria Premium - 12 meses",
     highlight: "Chamadas quinzenais + ajustes semanais",
     bullets: [
       "Chamadas quinzenais de acompanhamento global",
       "Ajustes semanais dos treinos conforme evolucao",
-      "Suporte proximo seg–sex, 7h as 20h",
+      "Suporte proximo seg-sex, 7h as 20h",
       "Limitado a 10 vagas",
     ],
     price: "R$ 5.997/ano (ate 12x)",
@@ -85,9 +84,10 @@ const extras = [
 ];
 
 const faq = [
-  { q: "O chat entrega treino pronto?", a: "Nao. Ele coleta e envia para a Paloma revisar." },
-  { q: "Quanto tempo para receber?", a: "Ate 24h uteis apos enviar a ficha." },
-  { q: "Tenho dor/lesao", a: "O chat marca risco e a Paloma fala antes de qualquer treino." },
+  { q: "Como recebo o plano?", a: "Após o checkout, a Paloma faz a anamnese e entrega o plano em até 24h uteis." },
+  { q: "Tem videochamada?", a: "Premium: chamadas quinzenais. Ano de Resultados: 1 chamada mensal de 20 min." },
+  { q: "Suporte?", a: "WhatsApp seg-sex, 7h as 20h, com ajustes conforme o plano contratado." },
+  { q: "E se eu tiver lesao?", a: "Informe na anamnese. Se for agudo, a Paloma pode solicitar liberacao antes de treinar." },
 ];
 
 export default function Home() {
@@ -106,13 +106,13 @@ export default function Home() {
             resultado com seguranca.
           </p>
           <div className={styles.heroMeta}>
-            <span>4-6 min de ficha</span>
-            <span>Paloma responde em ate 24h uteis</span>
+            <span>Planejamento sob medida</span>
+            <span>Revisao humana real</span>
             <span>Dados usados apenas no seu plano</span>
           </div>
           <div className={styles.ctas}>
-            <a className={styles.primary} href="#chat">
-              Comecar agora
+            <a className={styles.primary} href="#plans">
+              Ver planos
             </a>
           </div>
         </div>
@@ -130,8 +130,10 @@ export default function Home() {
               />
             </div>
             <div className={styles.photoFooter}>
-              <strong>Paloma Priebe</strong><br />
-              Especialista em prescricao e acompanhamento individual<br />
+              <strong>Paloma Priebe</strong>
+              <br />
+              Especialista em prescricao e acompanhamento individual
+              <br />
               Cofundadora RAWN PRO · CREF 018391-G/RS
             </div>
           </div>
@@ -201,8 +203,8 @@ export default function Home() {
           <p className={styles.eyebrow}>Planos</p>
           <h2>Escolha o plano que combina com sua jornada</h2>
           <p className={styles.sectionSubtitle}>
-            Objetivo desafiador ou lesao? Premium com reuniao quinzenal. Progresso consistente? Anual. Retomada? Trimestral ou Mensal.
-            Viagem ou agenda apertada? 14 dias.
+            Objetivo desafiador ou lesao? Premium com reuniao quinzenal. Progresso consistente? Anual. Retomada? Trimestral
+            ou Mensal. Viagem ou agenda apertada? 14 dias.
           </p>
         </div>
         <div className={styles.planGrid}>
@@ -224,9 +226,9 @@ export default function Home() {
                 ))}
               </ul>
               <div className={styles.planActions}>
-                <a className={styles.primaryGhost} href="#chat">
+                <Link className={styles.primaryGhost} href={plan.checkoutLabel}>
                   Comecar agora
-                </a>
+                </Link>
               </div>
             </div>
           ))}
@@ -234,41 +236,18 @@ export default function Home() {
         <div className={styles.extras}>
           <p className={styles.eyebrow}>Extras opcionais</p>
           <ul className={styles.list}>
-          {extras.map((extra) => (
-            <li key={extra.name} className={styles.extraItem}>
-              <div>
-                <span className={styles.extraName}>{extra.name}</span>{" "}
-                <span className={styles.extraPrice}>{extra.price}</span>
-              </div>
-              <Link className={styles.primaryGhost} href={extra.checkout}>
-                Agendar
-              </Link>
-            </li>
-          ))}
+            {extras.map((extra) => (
+              <li key={extra.name} className={styles.extraItem}>
+                <div>
+                  <span className={styles.extraName}>{extra.name}</span>{" "}
+                  <span className={styles.extraPrice}>{extra.price}</span>
+                </div>
+                <Link className={styles.primaryGhost} href={extra.checkout}>
+                  Agendar
+                </Link>
+              </li>
+            ))}
           </ul>
-        </div>
-      </section>
-
-      <section className={styles.chatSection} id="chat">
-        <div className={styles.sectionHeaderCompact}>
-          <p className={styles.eyebrow}>Chat + Paloma</p>
-          <h2>Anamnese guiada por IA cientifica</h2>
-          <p className={styles.sectionSubtitle}>
-            Perguntas especificas (local de treino, rotina, alimentacao, lesoes, sabotadores). IA treinada no Metodo 30,
-            mas quem aprova e acompanha e a Paloma. WhatsApp so apos contratacao.
-          </p>
-        </div>
-        <div className={styles.chatLayout}>
-          <div className={styles.chatSummary}>
-            <p className={styles.cardLabel}>O que rola</p>
-            <ul className={styles.list}>
-              <li>Foco: objetivo, rotina, local/equipamentos, sono/estresse, alimentacao, sabotadores</li>
-              <li>Marca lesao/dor e bloqueia qualquer treino automatico</li>
-              <li>Paloma revisa e devolve em ate 24h uteis</li>
-              <li>Checkout ao final; WhatsApp liberado para alunos ativos</li>
-            </ul>
-          </div>
-          <ChatSimulator />
         </div>
       </section>
 
@@ -295,8 +274,8 @@ export default function Home() {
           </p>
         </div>
         <div className={styles.footerActions}>
-          <a className={styles.primary} href="#chat">
-            Comecar agora
+          <a className={styles.primary} href="#plans">
+            Ver planos
           </a>
         </div>
       </footer>

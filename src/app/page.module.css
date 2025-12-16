@@ -342,7 +342,6 @@
 
 .stepsSection,
 .plansSection,
-.chatSection,
 .faqSection {
   display: flex;
   flex-direction: column;
@@ -516,9 +515,6 @@
     grid-template-columns: 1fr;
   }
 
-  .chatLayout {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 720px) {
@@ -539,3 +535,4 @@
     flex-direction: column;
   }
 }
+
