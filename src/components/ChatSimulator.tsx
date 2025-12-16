@@ -63,6 +63,7 @@ export default function ChatSimulator() {
   const [contact, setContact] = useState(defaultContact);
   const [inputError, setInputError] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [clarifications, setClarifications] = useState<Record<string, number>>({});
   const chatRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -86,10 +87,10 @@ export default function ChatSimulator() {
     if (typeof window !== "undefined") {
       localStorage.setItem(
         storageKey,
-        JSON.stringify({ messages, currentStep, answers, riskFlag, contact }),
+        JSON.stringify({ messages, currentStep, answers, riskFlag, contact, clarifications }),
       );
     }
-  }, [messages, currentStep, answers, riskFlag, contact]);
+  }, [messages, currentStep, answers, riskFlag, contact, clarifications]);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -115,6 +116,7 @@ export default function ChatSimulator() {
     setServerMessage(null);
     setContact(defaultContact);
     setInputError(null);
+    setClarifications({});
   }
 
   // Aceita qualquer resposta; a IA conduz e pede detalhes se precisar.
@@ -133,9 +135,17 @@ export default function ChatSimulator() {
     setInput("");
     if (detectRisk(text)) setRiskFlag(true);
     const aiReply = await callAi(text, step.id, updatedAnswers, step.prompt);
-    // Se a IA pediu mais detalhes (normalmente em forma de pergunta), nao avancar.
     if (aiReply && aiReply.includes("?")) {
-      return;
+      setClarifications((prev) => {
+        const count = (prev[step.id] || 0) + 1;
+        return { ...prev, [step.id]: count };
+      });
+      const countNow = (clarifications[step.id] || 0) + 1;
+      if (countNow < 2) {
+        return;
+      }
+    } else {
+      setClarifications((prev) => ({ ...prev, [step.id]: 0 }));
     }
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
