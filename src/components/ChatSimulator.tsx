@@ -117,26 +117,14 @@ export default function ChatSimulator() {
     setInputError(null);
   }
 
-  function isLowSignal(text: string, allowShort = false) {
-    const t = text.toLowerCase().trim();
-    const fillers = ["oi", "ok", "sim", "nao", "não", "blz", "tudo bem", "bom", "boa", "oii", "teste"];
-    const hasNumber = /\d/.test(t);
-    if (allowShort && t.length >= 3) return false;
-    if (t.length <= 2) return true;
-    if (fillers.includes(t)) return true;
-    // Respostas curtas com numero (ex.: 3x, 2/sem) sao aceitas
-    if (t.length < 7 && !hasNumber) return true;
+  // Aceita qualquer resposta; a IA conduz e pede detalhes se precisar.
+  function isLowSignal(_text: string, _allowShort = true) {
     return false;
   }
 
   async function handleSend(value?: string) {
     const text = (value ?? input).trim();
     if (!text) return;
-    const allowShort = currentStep === 0 || currentStep === 1;
-    if (isLowSignal(text, allowShort)) {
-      setInputError("Preciso de mais detalhes concretos.");
-      return;
-    }
     setInputError(null);
     const step = steps[currentStep];
     pushMessage({ from: "user", text });
