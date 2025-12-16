@@ -78,10 +78,22 @@ const extras = [
 ];
 
 const faq = [
-  { q: "Como recebo o plano?", a: "Apos o checkout, a Paloma faz a anamnese e entrega o plano em ate 24h uteis." },
-  { q: "Tem videochamada?", a: "Premium: chamadas quinzenais. Ano de Resultados: 1 chamada mensal de 20 min." },
-  { q: "Suporte?", a: "WhatsApp seg-sex, 7h as 20h, com ajustes conforme o plano contratado." },
-  { q: "E se eu tiver lesao?", a: "Informe na anamnese. Se for agudo, a Paloma pode solicitar liberacao antes de treinar." },
+  {
+    q: "Como recebo o plano?",
+    a: "Voce preenche a anamnese, a Paloma revisa e entrega em ate 24h uteis apos confirmar o pagamento.",
+  },
+  {
+    q: "Tem videochamada?",
+    a: "Premium: chamadas quinzenais. Ano de Resultados: 1 chamada mensal de 20 min. Demais planos: sem video.",
+  },
+  {
+    q: "Suporte?",
+    a: "WhatsApp seg-sex, 7h as 20h, com ajustes conforme o plano escolhido.",
+  },
+  {
+    q: "E se eu tiver lesao?",
+    a: "Informe na anamnese. Se for dor aguda ou sem liberacao, a Paloma pode pedir aval medico antes de liberar treino.",
+  },
 ];
 
 export default function Home() {
