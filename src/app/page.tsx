@@ -10,16 +10,10 @@ const methodQuick = [
   "Plano revisado pela Paloma antes de iniciar",
 ];
 
-const howSteps = [
-  { title: "Escolha o plano", text: "Selecione o nivel de acompanhamento que encaixa na sua rotina." },
-  { title: "Fale com a Paloma", text: "Ela faz a anamnese completa e monta o plano com o Metodo 30." },
-  { title: "Receba e ajuste", text: "Plano liberado, suporte pelo WhatsApp e sessoes ao vivo conforme o plano." },
-];
-
 const plans = [
   {
     name: "Impulso - 1 mes",
-    highlight: "Treino personalizado em 30 min adaptado a voce",
+    highlight: "Treino personalizado adaptado a sua rotina",
     bullets: [
       "Anamnese completa (historico, rotina, restricoes)",
       "1 plano de treino personalizado",
@@ -85,7 +79,7 @@ const extras = [
 ];
 
 const faq = [
-  { q: "Como recebo o plano?", a: "Após o checkout, a Paloma faz a anamnese e entrega o plano em até 24h uteis." },
+  { q: "Como recebo o plano?", a: "Apos o checkout, a Paloma faz a anamnese e entrega o plano em ate 24h uteis." },
   { q: "Tem videochamada?", a: "Premium: chamadas quinzenais. Ano de Resultados: 1 chamada mensal de 20 min." },
   { q: "Suporte?", a: "WhatsApp seg-sex, 7h as 20h, com ajustes conforme o plano contratado." },
   { q: "E se eu tiver lesao?", a: "Informe na anamnese. Se for agudo, a Paloma pode solicitar liberacao antes de treinar." },
@@ -136,9 +130,9 @@ export default function Home() {
             <div className={styles.photoFooter}>
               <strong>Paloma Priebe</strong>
               <br />
-              Especialista em prescricao e acompanhamento individual
+              Especialista em prescricao e acompanhamento individualizado
               <br />
-              Cofundadora RAWN PRO · CREF 018391-G/RS
+              Cofundadora RAWN PRO - CREF 018391-G/RS
             </div>
           </div>
         </div>
@@ -147,14 +141,14 @@ export default function Home() {
       <section className={styles.methodSection} id="metodo30">
         <div className={styles.sectionHeaderCompact}>
           <div className={styles.methodHeaderRow}>
-            <p className={styles.eyebrow}>METODO 30 ®</p>
+            <p className={styles.eyebrow}>METODO 30(R)</p>
             <Link className={styles.articleInline} href="/metodo-30">
-              Artigo cientifico →
+              Artigo cientifico do Metodo 30 &rarr;
             </Link>
           </div>
           <h2>Mentoria de treino enxuta</h2>
           <p className={styles.sectionSubtitle}>
-            Nao e “treino rapido”. E pensar certo para usar bem cada minuto.
+            Nao e "treino rapido". E pensar certo para usar bem cada minuto.
           </p>
         </div>
         <div className={styles.methodGrid}>
@@ -171,7 +165,7 @@ export default function Home() {
             <ul className={styles.list}>
               <li>Protocolo fixo</li>
               <li>HIIT obrigatorio</li>
-              <li>“Treino pronto em 30 min”</li>
+              <li>"Treino pronto em 30 min"</li>
               <li>Sem avaliacao profissional</li>
             </ul>
           </div>
@@ -184,34 +178,6 @@ export default function Home() {
               <li>Como garantir execucao boa?</li>
             </ul>
           </div>
-        </div>
-      </section>
-
-      <section className={styles.chatSection} id="chat">
-        <div className={styles.sectionHeaderCompact}>
-          <p className={styles.eyebrow}>Chat IA + Paloma</p>
-          <h2>Anamnese inteligente, 1 pergunta por vez</h2>
-          <p className={styles.sectionSubtitle}>
-            Conversa curta e focada: objetivo, lesões, rotina, tempo, equipamentos e sabotadores. IA coleta, Paloma revisa e envia o plano.
-          </p>
-        </div>
-        <div className={styles.chatLayout}>
-          <ChatSimulator />
-        </div>
-      </section>
-
-      <section className={styles.stepsSection} id="como-funciona">
-        <div className={styles.sectionHeaderCompact}>
-          <p className={styles.eyebrow}>Simples assim</p>
-          <h2>3 passos</h2>
-        </div>
-        <div className={styles.stepsGrid}>
-          {howSteps.map((step) => (
-            <div key={step.title} className={styles.card}>
-              <p className={styles.cardLabel}>{step.title}</p>
-              <p className={styles.cardBody}>{step.text}</p>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -228,9 +194,7 @@ export default function Home() {
           {plans.map((plan, index) => (
             <div
               key={plan.name}
-              className={`${styles.planCard} ${
-                index === 0 ? styles.planCardFeatured : ""
-              }`}
+              className={`${styles.planCard} ${index === 0 ? styles.planCardFeatured : ""}`}
             >
               <div className={styles.planHead}>
                 <p className={styles.planName}>{plan.name}</p>
@@ -268,6 +232,19 @@ export default function Home() {
         </div>
       </section>
 
+      <section className={styles.chatSection} id="chat">
+        <div className={styles.sectionHeaderCompact}>
+          <p className={styles.eyebrow}>Chat IA + Paloma</p>
+          <h2>Anamnese inteligente, 1 pergunta por vez</h2>
+          <p className={styles.sectionSubtitle}>
+            Conversa curta e focada: objetivo, lesoes, rotina, tempo, equipamentos e sabotadores. IA coleta, Paloma revisa e envia o plano.
+          </p>
+        </div>
+        <div className={styles.chatLayout}>
+          <ChatSimulator />
+        </div>
+      </section>
+
       <section className={styles.faqSection} id="faq">
         <div className={styles.sectionHeaderCompact}>
           <p className={styles.eyebrow}>Duvidas</p>
@@ -287,7 +264,7 @@ export default function Home() {
         <div>
           <p className={styles.eyebrow}>Paloma Priebe</p>
           <p className={styles.footerText}>
-            Treino remoto com olhar humano. Metodo 30 para quem quer eficiencia e seguranca.
+            Treino sob medida com olhar humano. Metodo 30 para quem quer eficiencia e seguranca.
           </p>
         </div>
         <div className={styles.footerActions}>
