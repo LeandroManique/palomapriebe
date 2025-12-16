@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -7,18 +7,18 @@ import styles from "./ChatSimulator.module.css";
 type Message = { from: "ai" | "user"; text: string };
 
 const steps = [
-  { id: "goal", prompt: "Qual seu objetivo principal? (ex.: força, hipertrofia, dor lombar, emagrecimento)" },
-  { id: "success", prompt: "O que é sucesso pra você nesse objetivo? (ex.: roupa, prova, dor zero)" },
-  { id: "history", prompt: "Histórico de treino e lesões? Alguma dor atual ou cirurgia?" },
-  { id: "availability", prompt: "Dias/semana e minutos por sessão que você tem? (ex.: 3x/sem, 30-40 min)" },
-  { id: "location", prompt: "Onde vai treinar? (academia, casa, condomínio, viagem) e o espaço disponível?" },
-  { id: "equipment", prompt: "Quais equipamentos? (halteres, elástico, barra, anilhas, banco, peso corporal)" },
-  { id: "effort", prompt: "Como reage a cargas/intensidade? Já passou mal em treino intenso?" },
-  { id: "recovery", prompt: "Sono e estresse: quantas horas, acorda descansado? Usa medicação?" },
-  { id: "nutrition", prompt: "Alimentação/hidratação: regular, restrições? Bebe quanta água/dia?" },
+  { id: "goal", prompt: "Qual seu objetivo principal? (ex.: forÃ§a, hipertrofia, dor lombar, emagrecimento)" },
+  { id: "success", prompt: "O que Ã© sucesso pra vocÃª nesse objetivo? (ex.: roupa, prova, dor zero)" },
+  { id: "history", prompt: "HistÃ³rico de treino e lesÃµes? Alguma dor atual ou cirurgia?" },
+  { id: "availability", prompt: "Dias/semana e minutos por sessÃ£o que vocÃª tem? (ex.: 3x/sem, 30-40 min)" },
+  { id: "location", prompt: "Onde vai treinar? (academia, casa, condomÃ­nio, viagem) e o espaÃ§o disponÃ­vel?" },
+  { id: "equipment", prompt: "Quais equipamentos? (halteres, elÃ¡stico, barra, anilhas, banco, peso corporal)" },
+  { id: "effort", prompt: "Como reage a cargas/intensidade? JÃ¡ passou mal em treino intenso?" },
+  { id: "recovery", prompt: "Sono e estresse: quantas horas, acorda descansado? Usa medicaÃ§Ã£o?" },
+  { id: "nutrition", prompt: "AlimentaÃ§Ã£o/hidrataÃ§Ã£o: regular, restriÃ§Ãµes? Bebe quanta Ã¡gua/dia?" },
   { id: "work", prompt: "Rotina de trabalho/estudos: turnos, deslocamentos, dias mais cansativos?" },
-  { id: "obstacles", prompt: "O que mais faz você faltar? (tempo, sono, logística, motivação, dor)" },
-  { id: "preferences", prompt: "Preferências/restrições de movimentos? Algo que evita ou gosta de fazer?" },
+  { id: "obstacles", prompt: "O que mais faz vocÃª faltar? (tempo, sono, logÃ­stica, motivaÃ§Ã£o, dor)" },
+  { id: "preferences", prompt: "PreferÃªncias/restriÃ§Ãµes de movimentos? Algo que evita ou gosta de fazer?" },
 ];
 
 const storageKey = "paloma-chat-v2";
@@ -51,7 +51,7 @@ const defaultContact = {
 
 export default function ChatSimulator() {
   const [messages, setMessages] = useState<Message[]>([
-    { from: "ai", text: "Oi! Sou o assistente da Paloma. Vamos fazer uma anamnese rápida e precisa. 1 pergunta por vez." },
+    { from: "ai", text: "Oi! Sou o assistente da Paloma. Vamos fazer uma anamnese rÃ¡pida e precisa. 1 pergunta por vez." },
     { from: "ai", text: steps[0].prompt },
   ]);
   const [currentStep, setCurrentStep] = useState(0);
@@ -104,7 +104,7 @@ export default function ChatSimulator() {
 
   function resetChat() {
     setMessages([
-      { from: "ai", text: "Oi! Sou o assistente da Paloma. Vamos fazer uma anamnese rápida e precisa. 1 pergunta por vez." },
+      { from: "ai", text: "Oi! Sou o assistente da Paloma. Vamos fazer uma anamnese rÃ¡pida e precisa. 1 pergunta por vez." },
       { from: "ai", text: steps[0].prompt },
     ]);
     setCurrentStep(0);
@@ -119,7 +119,7 @@ export default function ChatSimulator() {
 
   function isLowSignal(text: string) {
     const t = text.toLowerCase().trim();
-    const fillers = ["oi", "ok", "sim", "nao", "não", "blz", "tudo bem", "bom", "boa", "oii", "teste"];
+    const fillers = ["oi", "ok", "sim", "nao", "nÃ£o", "blz", "tudo bem", "bom", "boa", "oii", "teste"];
     if (t.length < 8) return true;
     if (fillers.includes(t)) return true;
     return false;
@@ -155,7 +155,7 @@ export default function ChatSimulator() {
 
   function detectRisk(text: string) {
     const lowered = text.toLowerCase();
-    const triggers = ["dor", "lesao", "lesão", "cirurgia", "cardiaco", "cardíaco", "fratura", "inflamacao", "inflamação"];
+    const triggers = ["dor", "lesao", "lesÃ£o", "cirurgia", "cardiaco", "cardÃ­aco", "fratura", "inflamacao", "inflamaÃ§Ã£o"];
     return triggers.some((w) => lowered.includes(w));
   }
 
@@ -192,7 +192,7 @@ export default function ChatSimulator() {
       console.error(error);
       pushMessage({
         from: "ai",
-        text: "Não entendi bem. Pode detalhar um pouco mais? (tente novamente se persistir)",
+        text: "NÃ£o entendi bem. Pode detalhar um pouco mais? (tente novamente se persistir)",
       });
     } finally {
       setAiLoading(false);
@@ -205,15 +205,15 @@ export default function ChatSimulator() {
       answers.equipment || answers.location || answers.locationDetail || answers.equipmentDetail || "a definir";
     return {
       systems: answers.goal
-        ? `Foco em ${answers.goal}; estimular sistemas neuromuscular/cardio conforme tolerância.`
+        ? `Foco em ${answers.goal}; estimular sistemas neuromuscular/cardio conforme tolerÃ¢ncia.`
         : "",
-      intensity: answers.effort ? "Intensidade relativa calibrada; se reação ruim, densidade mais baixa." : "",
+      intensity: answers.effort ? "Intensidade relativa calibrada; se reaÃ§Ã£o ruim, densidade mais baixa." : "",
       density:
         answers.availability && answers.availability.includes("30")
-          ? "Sessões compactas → densidade alta e descanso curto."
+          ? "SessÃµes compactas â†’ densidade alta e descanso curto."
           : "Organizar blocos para maximizar trabalho/tempo.",
-      volume: "Volume mínimo eficaz, progredindo quando técnica e recuperação estiverem sólidas.",
-      technique: "Checkpoints técnicos e evitar compensações, especialmente com histórico de lesão.",
+      volume: "Volume mÃ­nimo eficaz, progredindo quando tÃ©cnica e recuperaÃ§Ã£o estiverem sÃ³lidas.",
+      technique: "Checkpoints tÃ©cnicos e evitar compensaÃ§Ãµes, especialmente com histÃ³rico de lesÃ£o.",
       equipment: equip,
     };
   }
@@ -259,7 +259,7 @@ export default function ChatSimulator() {
         <div>
           <p className={styles.label}>Chat de anamnese</p>
           <p className={styles.meta}>
-            Progresso {Math.min(currentStep, steps.length)}/{steps.length} · {progress}% · Método 30
+            Progresso {Math.min(currentStep, steps.length)}/{steps.length} Â· {progress}% Â· MÃ©todo 30
           </p>
         </div>
         <div className={styles.chatHeaderRight}>
@@ -283,7 +283,7 @@ export default function ChatSimulator() {
         ))}
         {riskFlag && (
           <div className={`${styles.message} ${styles.alert}`}>
-            ⚠️ Indicou risco/lesão. Fale com a Paloma antes de treinar se dor persistir.
+            âš ï¸ Indicou risco/lesÃ£o. Fale com a Paloma antes de treinar se dor persistir.
           </div>
         )}
         {aiLoading && (
@@ -382,7 +382,7 @@ export default function ChatSimulator() {
             </div>
           )}
           <div className={styles.summaryBox}>
-            <p className={styles.label}>Resumo Método 30</p>
+            <p className={styles.label}>Resumo MÃ©todo 30</p>
             <ul className={styles.list}>
               <li>{summary().systems}</li>
               <li>{summary().intensity}</li>
@@ -397,3 +397,4 @@ export default function ChatSimulator() {
     </div>
   );
 }
+
