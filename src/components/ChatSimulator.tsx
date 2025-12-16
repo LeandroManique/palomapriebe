@@ -46,6 +46,7 @@ export default function ChatSimulator() {
   const [inputError, setInputError] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [showLeadForm, setShowLeadForm] = useState(false);
+  const checkoutOpened = useRef(false);
   const chatRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -90,6 +91,7 @@ export default function ChatSimulator() {
     setContact(defaultContact);
     setInputError(null);
     setShowLeadForm(false);
+    checkoutOpened.current = false;
   }
 
   async function handleSend(value?: string) {
@@ -141,6 +143,12 @@ export default function ChatSimulator() {
   }
 
   async function submitLead() {
+    const userMessages = messages.filter((m) => m.from === "user");
+    if (userMessages.length < 3) {
+      setServerMessage("Para enviar a ficha, compartilhe antes seu contexto na anamnese.");
+      setStatus("error");
+      return;
+    }
     if (!contact.name || !contact.email || !contact.phone || !contact.consent) {
       setServerMessage("Preencha nome, email, WhatsApp e aceite o uso dos dados.");
       setStatus("error");
@@ -169,6 +177,13 @@ export default function ChatSimulator() {
       if (!res.ok) throw new Error(json?.message || "Erro ao enviar ficha.");
       setStatus("sent");
       setServerMessage(json?.message || "Ficha enviada para a Paloma revisar.");
+      if (!checkoutOpened.current) {
+        const url = checkoutLinks[contact.plan] || "";
+        if (url) {
+          checkoutOpened.current = true;
+          window.open(url, "_blank");
+        }
+      }
     } catch (error) {
       console.error(error);
       setStatus("error");
@@ -300,9 +315,6 @@ export default function ChatSimulator() {
             >
               {status === "sending" ? "Enviando..." : "Enviar ficha para a Paloma"}
             </button>
-            <Link className={styles.secondary} href={checkoutLinks[contact.plan] || "#"} target="_blank">
-              Ir para checkout
-            </Link>
           </div>
           {serverMessage && (
             <div className={status === "sent" ? styles.success : styles.error}>

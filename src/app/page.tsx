@@ -217,19 +217,19 @@ export default function Home() {
         <div className={styles.extras}>
           <p className={styles.eyebrow}>Extras opcionais</p>
           <ul className={styles.list}>
-          {extras.map((extra) => (
-            <li key={extra.name} className={styles.extraItem}>
-              <div>
-                <span className={styles.extraName}>{extra.name}</span>{" "}
-                <span className={styles.extraPrice}>{extra.price}</span>
-              </div>
-              <Link className={styles.primaryGhost} href="#chat">
-                Comecar anamnese
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+            {extras.map((extra) => (
+              <li key={extra.name} className={styles.extraItem}>
+                <div>
+                  <span className={styles.extraName}>{extra.name}</span>{" "}
+                  <span className={styles.extraPrice}>{extra.price}</span>
+                </div>
+                <Link className={styles.primaryGhost} href={extra.checkout} target="_blank">
+                  Agendar
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <section className={styles.chatSection} id="chat">
