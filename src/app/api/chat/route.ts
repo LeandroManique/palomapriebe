@@ -9,6 +9,7 @@ type ChatPayload = {
   question?: string;
   answers?: Record<string, string>;
   riskFlag?: boolean;
+  history?: { from: string; text: string }[];
 };
 
 const systemPrompt = `
@@ -132,7 +133,7 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as ChatPayload;
-    const { user, stepId, question, answers, riskFlag } = body;
+    const { user, answers, riskFlag, history } = body;
 
     const stepsOrder = [
       "goal",
@@ -157,14 +158,18 @@ export async function POST(req: Request) {
     }
     const summary = summaryParts.length ? summaryParts.join("; ") : "ainda sem dados relevantes";
 
+    const historyText =
+      history && history.length
+        ? history.map((m) => `${m.from}: ${m.text}`).join(" | ")
+        : "Sem historico previo.";
+
     const userMsg = [
-      `Pergunta atual: ${question || ""}`.trim(),
-      stepId ? `Passo: ${stepId}` : "",
       riskFlag ? "Flag de risco: SIM" : "",
       `Resumo coletado: ${summary}`,
       `Lacunas prioritarias: ${missing.join(", ")}`,
-      `Resposta do aluno: "${user}"`,
-      answers ? `Contexto coletado: ${JSON.stringify(answers)}` : "",
+      `Historico do chat: ${historyText}`,
+      `Ultima fala do aluno: "${user}"`,
+      answers ? `Contexto bruto: ${JSON.stringify(answers)}` : "",
     ]
       .filter(Boolean)
       .join("\n");

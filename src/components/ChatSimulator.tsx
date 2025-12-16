@@ -1,25 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./ChatSimulator.module.css";
 
 type Message = { from: "ai" | "user"; text: string };
-
-const steps = [
-  { id: "goal", prompt: "Qual seu objetivo principal? (ex.: forca, hipertrofia, dor lombar, emagrecimento)" },
-  { id: "success", prompt: "O que e sucesso pra voce nesse objetivo? (ex.: roupa, prova, dor zero)" },
-  { id: "history", prompt: "Historico de treino e lesoes? Alguma dor atual ou cirurgia?" },
-  { id: "availability", prompt: "Dias/semana e minutos por sessao que voce tem? (ex.: 3x/sem, 30-40 min)" },
-  { id: "location", prompt: "Onde vai treinar? (academia, casa, condominio, viagem) e o espaco disponivel?" },
-  { id: "equipment", prompt: "Quais equipamentos? (halteres, elastico, barra, anilhas, banco, peso corporal)" },
-  { id: "effort", prompt: "Como reage a cargas/intensidade? Ja passou mal em treino intenso?" },
-  { id: "recovery", prompt: "Sono e estresse: quantas horas, acorda descansado? Usa medicacao?" },
-  { id: "nutrition", prompt: "Alimentacao/hidratacao: regular, restricoes? Bebe quanta agua/dia?" },
-  { id: "work", prompt: "Rotina de trabalho/estudos: turnos, deslocamentos, dias mais cansativos?" },
-  { id: "obstacles", prompt: "O que mais faz voce faltar? (tempo, sono, logistica, motivacao, dor)" },
-  { id: "preferences", prompt: "Preferencias/restricoes de movimentos? Algo que evita ou gosta de fazer?" },
-];
 
 const storageKey = "paloma-chat-v2";
 
@@ -51,11 +36,8 @@ const defaultContact = {
 
 export default function ChatSimulator() {
   const [messages, setMessages] = useState<Message[]>([
-    { from: "ai", text: "Oi! Sou o assistente da Paloma. Vamos fazer uma anamnese rapida e precisa. 1 pergunta por vez." },
-    { from: "ai", text: steps[0].prompt },
+    { from: "ai", text: "Oi! Sou o assistente da Paloma. Vamos conversar de forma livre para entender seu contexto e montar um plano seguro e Metodo 30." },
   ]);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [input, setInput] = useState("");
   const [riskFlag, setRiskFlag] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -63,7 +45,7 @@ export default function ChatSimulator() {
   const [contact, setContact] = useState(defaultContact);
   const [inputError, setInputError] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
-  const [clarifications, setClarifications] = useState<Record<string, number>>({});
+  const [showLeadForm, setShowLeadForm] = useState(false);
   const chatRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -72,10 +54,9 @@ export default function ChatSimulator() {
       try {
         const parsed = JSON.parse(saved);
         setMessages(parsed.messages ?? messages);
-        setCurrentStep(parsed.currentStep ?? 0);
-        setAnswers(parsed.answers ?? {});
         setRiskFlag(parsed.riskFlag ?? false);
         setContact(parsed.contact ?? defaultContact);
+        setShowLeadForm(parsed.showLeadForm ?? false);
       } catch (error) {
         console.error("Erro ao carregar chat", error);
       }
@@ -87,10 +68,10 @@ export default function ChatSimulator() {
     if (typeof window !== "undefined") {
       localStorage.setItem(
         storageKey,
-        JSON.stringify({ messages, currentStep, answers, riskFlag, contact, clarifications }),
+        JSON.stringify({ messages, riskFlag, contact, showLeadForm }),
       );
     }
-  }, [messages, currentStep, answers, riskFlag, contact, clarifications]);
+  }, [messages, riskFlag, contact, showLeadForm]);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -98,62 +79,27 @@ export default function ChatSimulator() {
     }
   }, [messages]);
 
-  const progress = useMemo(() => {
-    const pct = Math.min((currentStep / steps.length) * 100, 100);
-    return Math.round(pct);
-  }, [currentStep]);
-
   function resetChat() {
     setMessages([
-      { from: "ai", text: "Oi! Sou o assistente da Paloma. Vamos fazer uma anamnese rapida e precisa. 1 pergunta por vez." },
-      { from: "ai", text: steps[0].prompt },
+      { from: "ai", text: "Oi! Sou o assistente da Paloma. Vamos conversar de forma livre para entender seu contexto e montar um plano seguro e Metodo 30." },
     ]);
-    setCurrentStep(0);
-    setAnswers({});
     setRiskFlag(false);
     setInput("");
     setStatus("idle");
     setServerMessage(null);
     setContact(defaultContact);
     setInputError(null);
-    setClarifications({});
-  }
-
-  // Aceita qualquer resposta; a IA conduz e pede detalhes se precisar.
-  function isLowSignal(_text: string, _allowShort = true) {
-    return false;
+    setShowLeadForm(false);
   }
 
   async function handleSend(value?: string) {
     const text = (value ?? input).trim();
     if (!text) return;
     setInputError(null);
-    const step = steps[currentStep];
     pushMessage({ from: "user", text });
-    const updatedAnswers = { ...answers, [step.id]: text };
-    setAnswers(updatedAnswers);
     setInput("");
     if (detectRisk(text)) setRiskFlag(true);
-    const aiReply = await callAi(text, step.id, updatedAnswers, step.prompt);
-    if (aiReply && aiReply.includes("?")) {
-      setClarifications((prev) => {
-        const count = (prev[step.id] || 0) + 1;
-        return { ...prev, [step.id]: count };
-      });
-      const countNow = (clarifications[step.id] || 0) + 1;
-      if (countNow < 2) {
-        return;
-      }
-    } else {
-      setClarifications((prev) => ({ ...prev, [step.id]: 0 }));
-    }
-    const nextStep = currentStep + 1;
-    setCurrentStep(nextStep);
-    if (nextStep < steps.length) {
-      pushMessage({ from: "ai", text: steps[nextStep].prompt });
-    } else {
-      pushMessage({ from: "ai", text: "Obrigado! Agora preciso de seus contatos e plano escolhido." });
-    }
+    await callAi(text);
   }
 
   function detectRisk(text: string) {
@@ -166,12 +112,7 @@ export default function ChatSimulator() {
     setMessages((prev) => [...prev, msg]);
   }
 
-  async function callAi(
-    userText: string,
-    stepId?: string,
-    enrichedAnswers?: Record<string, string>,
-    question?: string,
-  ) {
+  async function callAi(userText: string) {
     try {
       setAiLoading(true);
       const res = await fetch("/api/chat", {
@@ -179,46 +120,24 @@ export default function ChatSimulator() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user: userText,
-          stepId,
-          question,
-          answers: enrichedAnswers ?? answers,
           riskFlag,
+          history: messages,
         }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.message || "Erro na IA");
       if (json.reply) {
         pushMessage({ from: "ai", text: json.reply });
-        return json.reply as string;
       }
     } catch (error) {
       console.error(error);
       pushMessage({
         from: "ai",
-        text: "Nao entendi bem. Pode detalhar um pouco mais? (tente novamente se persistir)",
+        text: "Nao entendi bem. Pode explicar de outro jeito?",
       });
     } finally {
       setAiLoading(false);
     }
-    return undefined;
-  }
-
-  function summary() {
-    const equip =
-      answers.equipment || answers.location || answers.locationDetail || answers.equipmentDetail || "a definir";
-    return {
-      systems: answers.goal
-        ? `Foco em ${answers.goal}; estimular sistemas neuromuscular/cardio conforme tolerancia.`
-        : "",
-      intensity: answers.effort ? "Intensidade relativa calibrada; se reacao ruim, densidade mais baixa." : "",
-      density:
-        answers.availability && answers.availability.includes("30")
-          ? "Sessoes compactas, densidade alta e descanso curto."
-          : "Organizar blocos para maximizar trabalho/tempo.",
-      volume: "Volume minimo eficaz, progredindo quando tecnica e recuperacao estiverem solidas.",
-      technique: "Checkpoints tecnicos e evitar compensacoes, especialmente com historico de lesao.",
-      equipment: equip,
-    };
   }
 
   async function submitLead() {
@@ -231,8 +150,8 @@ export default function ChatSimulator() {
     setServerMessage(null);
     const payload = {
       contact,
-      answers,
-      summary: summary(),
+      answers: {},
+      summary: {},
       riskFlag,
       meta: {
         source: "landing-chat",
@@ -261,14 +180,9 @@ export default function ChatSimulator() {
       <div className={styles.chatHeader}>
         <div>
           <p className={styles.label}>Chat de anamnese</p>
-          <p className={styles.meta}>
-            Progresso {Math.min(currentStep, steps.length)}/{steps.length} · {progress}% · Metodo 30
-          </p>
+          <p className={styles.meta}>Conversa livre · Metodo 30</p>
         </div>
         <div className={styles.chatHeaderRight}>
-          <div className={styles.progressBar}>
-            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
-          </div>
           <button type="button" className={styles.reset} onClick={resetChat}>
             Reiniciar
           </button>
@@ -296,27 +210,37 @@ export default function ChatSimulator() {
         )}
       </div>
 
-      {currentStep < steps.length && (
-        <form
-          className={styles.inputRow}
-          onSubmit={(event) => {
-            event.preventDefault();
-            handleSend();
-          }}
-        >
-          <input
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="Digite sua resposta e pressione Enter"
-          />
-          <button type="submit" className={styles.sendButton}>
-            Enviar
-          </button>
-        </form>
-      )}
+      <form
+        className={styles.inputRow}
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleSend();
+        }}
+      >
+        <input
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+          placeholder="Digite sua resposta e pressione Enter"
+        />
+        <button type="submit" className={styles.sendButton}>
+          Enviar
+        </button>
+      </form>
       {inputError && <div className={styles.error}>{inputError}</div>}
 
-      {currentStep >= steps.length && (
+      <div className={styles.actions} style={{ marginTop: "12px" }}>
+        {!showLeadForm && (
+          <button
+            type="button"
+            className={styles.primary}
+            onClick={() => setShowLeadForm(true)}
+          >
+            Enviar meus dados para a Paloma
+          </button>
+        )}
+      </div>
+
+      {showLeadForm && (
         <div className={styles.leadForm}>
           <div className={styles.formGrid}>
             <label>
@@ -384,17 +308,6 @@ export default function ChatSimulator() {
               {serverMessage}
             </div>
           )}
-          <div className={styles.summaryBox}>
-            <p className={styles.label}>Resumo Metodo 30</p>
-            <ul className={styles.list}>
-              <li>{summary().systems}</li>
-              <li>{summary().intensity}</li>
-              <li>{summary().density}</li>
-              <li>{summary().volume}</li>
-              <li>{summary().technique}</li>
-              <li>Local/equipamentos: {summary().equipment}</li>
-            </ul>
-          </div>
         </div>
       )}
     </div>
