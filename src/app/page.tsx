@@ -235,9 +235,9 @@ export default function Home() {
       <section className={styles.chatSection} id="chat">
         <div className={styles.sectionHeaderCompact}>
           <p className={styles.eyebrow}>Chat IA + Paloma</p>
-          <h2>Anamnese inteligente, 1 pergunta por vez</h2>
+          <h2>Treino que funciona comeca com clareza</h2>
           <p className={styles.sectionSubtitle}>
-            Conversa curta e focada: objetivo, lesoes, rotina, tempo, equipamentos e sabotadores. IA coleta, Paloma revisa e envia o plano.
+            Essa conversa orienta todo o seu plano de treino. Reserve cerca de 10 minutos e responda com calma e atencao.
           </p>
         </div>
         <div className={styles.chatLayout}>

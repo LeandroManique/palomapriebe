@@ -195,8 +195,8 @@ export default function ChatSimulator() {
     <div className={styles.chatCard} id="chat">
       <div className={styles.chatHeader}>
         <div>
-          <p className={styles.label}>Chat de anamnese</p>
-          <p className={styles.meta}>Conversa livre · Metodo 30</p>
+          <p className={styles.label}>Anamnese inicial</p>
+          <p className={styles.meta}>Base para definicao do seu treino</p>
         </div>
         <div className={styles.chatHeaderRight}>
           <button type="button" className={styles.reset} onClick={resetChat}>
