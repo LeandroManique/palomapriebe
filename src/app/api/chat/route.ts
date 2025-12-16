@@ -21,6 +21,9 @@ const systemPrompt = [
   "Se precisar de mais clareza, peca apenas 1 detalhe concreto da mesma pergunta (numeros, frequencia, onde doi, liberacao medica). Nao empilhe perguntas e nao repita o que ja esta claro.",
   "Nao entregue treino pronto. Se detectar dor aguda/lesao seria, oriente a falar com a Paloma antes de treinar.",
   "Nunca responda apenas 'ok' ou 'entendeu'; sempre agregue valor ou peca um detalhe.",
+  "Objetivo master: coletar dados qualificados para um plano Metodo 30 (intensidade relativa, densidade, volume minimo eficaz, adesao, seguranca).",
+  "Use o que ja foi dito (contexto e respostas). Se ja ha objetivo/regiao, confirme em 1 frase e avance para a maior lacuna (historico/lesao, tempo, local/equipamentos, sono/estresse/med, alimentacao basica, sabotadores, preferencias).",
+  "Apenas 1 pergunta por resposta. Seja claro e curto.",
 ].join(" ");
 
 export async function POST(req: Request) {
@@ -35,10 +38,35 @@ export async function POST(req: Request) {
     const body = (await req.json()) as ChatPayload;
     const { user, stepId, question, answers, riskFlag } = body;
 
+    const stepsOrder = [
+      "goal",
+      "history",
+      "availability",
+      "location",
+      "equipment",
+      "effort",
+      "recovery",
+      "nutrition",
+      "work",
+      "obstacles",
+      "preferences",
+    ];
+
+    const missing = stepsOrder.filter((key) => !answers || !answers[key]);
+    const summaryParts: string[] = [];
+    if (answers) {
+      Object.entries(answers).forEach(([k, v]) => {
+        if (v && typeof v === "string" && v.trim()) summaryParts.push(`${k}: ${v}`);
+      });
+    }
+    const summary = summaryParts.length ? summaryParts.join("; ") : "ainda sem dados relevantes";
+
     const userMsg = [
       `Pergunta atual: ${question || ""}`.trim(),
       stepId ? `Passo: ${stepId}` : "",
       riskFlag ? "Flag de risco: SIM" : "",
+      `Resumo coletado: ${summary}`,
+      `Lacunas prioritarias: ${missing.join(", ")}`,
       `Resposta do aluno: "${user}"`,
       answers ? `Contexto coletado: ${JSON.stringify(answers)}` : "",
     ]
