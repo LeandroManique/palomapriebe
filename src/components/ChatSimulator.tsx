@@ -46,6 +46,7 @@ export default function ChatSimulator() {
   const [inputError, setInputError] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [showLeadForm, setShowLeadForm] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
   const chatRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -68,10 +69,10 @@ export default function ChatSimulator() {
     if (typeof window !== "undefined") {
       localStorage.setItem(
         storageKey,
-        JSON.stringify({ messages, riskFlag, contact, showLeadForm }),
+        JSON.stringify({ messages, riskFlag, contact, showLeadForm, showSummary }),
       );
     }
-  }, [messages, riskFlag, contact, showLeadForm]);
+  }, [messages, riskFlag, contact, showLeadForm, showSummary]);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -90,6 +91,7 @@ export default function ChatSimulator() {
     setContact(defaultContact);
     setInputError(null);
     setShowLeadForm(false);
+    setShowSummary(false);
   }
 
   async function handleSend(value?: string) {
@@ -150,6 +152,7 @@ export default function ChatSimulator() {
     setServerMessage(null);
     const payload = {
       contact,
+      messages,
       answers: {},
       summary: {},
       riskFlag,
@@ -238,6 +241,14 @@ export default function ChatSimulator() {
             Enviar meus dados para a Paloma
           </button>
         )}
+        <button
+          type="button"
+          className={styles.secondary}
+          onClick={() => setShowSummary(true)}
+          style={{ marginLeft: "8px" }}
+        >
+          Ver resumo e planos
+        </button>
       </div>
 
       {showLeadForm && (
@@ -308,6 +319,42 @@ export default function ChatSimulator() {
               {serverMessage}
             </div>
           )}
+        </div>
+      )}
+
+      {showSummary && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modal}>
+            <div className={styles.modalHeader}>
+              <p className={styles.label}>Resumo da conversa</p>
+              <button className={styles.reset} onClick={() => setShowSummary(false)}>
+                Fechar
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <p className={styles.meta}>Sintese livre do que voce compartilhou:</p>
+              <div className={styles.summaryBox}>
+                {messages
+                  .filter((m) => m.from === "user")
+                  .slice(-6)
+                  .map((m, idx) => (
+                    <p key={idx} className={styles.cardBody}>
+                      • {m.text}
+                    </p>
+                  ))}
+              </div>
+              <p className={styles.cardBody}>
+                Esta síntese orienta as decisoes do plano. Escolha um plano para continuar.
+              </p>
+              <div className={styles.actions} style={{ gap: "8px", flexWrap: "wrap" }}>
+                {planOptions.map((plan) => (
+                  <Link key={plan} className={styles.primaryGhost} href={checkoutLinks[plan]} target="_blank">
+                    {plan}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
