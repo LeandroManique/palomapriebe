@@ -342,13 +342,7 @@
 
 .stepsSection,
 .plansSection,
-.chatSection,
-.faqSection {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
+ .chatSection, .faqSection { display: flex; flex-direction: column; gap: 20px; }
 .stepsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -404,11 +398,7 @@
   justify-content: flex-start;
 }
 
-.chatLayout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
-}
+.chatLayout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; max-width: 760px; margin: 0 auto; }
 
 .extras {
   margin-top: 16px;
@@ -437,11 +427,7 @@
   color: var(--muted);
 }
 
-.chatLayout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 16px;
-}
+
 
 .chatSummary {
   background: var(--card);
@@ -542,3 +528,5 @@
     flex-direction: column;
   }
 }
+
+

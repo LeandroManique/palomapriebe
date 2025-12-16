@@ -2,9 +2,11 @@
   background: var(--card);
   border: 1px solid var(--stroke);
   border-radius: 18px;
-  padding: 16px;
+  padding: 14px;
   display: grid;
   gap: 12px;
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .chatHeader {
@@ -70,7 +72,7 @@
   padding: 10px 12px;
   border-radius: 14px;
   line-height: 1.4;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .ai {
@@ -109,7 +111,7 @@
   border-radius: 14px;
   padding: 14px;
   color: var(--text);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .sendButton {
@@ -120,7 +122,7 @@
   padding: 14px 18px;
   cursor: pointer;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .error {
@@ -146,7 +148,7 @@
   display: grid;
   gap: 6px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .formGrid input,
@@ -156,7 +158,7 @@
   border-radius: 12px;
   padding: 12px;
   color: var(--text);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .checkbox {
@@ -164,7 +166,7 @@
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .actions {
@@ -213,9 +215,30 @@
   display: grid;
   gap: 4px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .summaryBox .list li {
   list-style: "• ";
+}
+
+@media (max-width: 640px) {
+  .chatCard {
+    padding: 12px;
+  }
+  .chatWindow {
+    max-height: 320px;
+  }
+  .inputRow {
+    grid-template-columns: 1fr auto;
+  }
+  .sendButton {
+    padding: 12px 14px;
+  }
+  .message {
+    font-size: 15px;
+  }
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
 }
