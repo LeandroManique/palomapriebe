@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ChatSimulator from "@/components/ChatSimulator";
 import styles from "./page.module.css";
 
 const methodQuick = [
@@ -111,7 +112,10 @@ export default function Home() {
             <span>Dados usados apenas no seu plano</span>
           </div>
           <div className={styles.ctas}>
-            <a className={styles.primary} href="#plans">
+            <a className={styles.primary} href="#chat">
+              Comecar anamnese
+            </a>
+            <a className={styles.secondary} href="#plans">
               Ver planos
             </a>
           </div>
@@ -180,6 +184,19 @@ export default function Home() {
               <li>Como garantir execucao boa?</li>
             </ul>
           </div>
+        </div>
+      </section>
+
+      <section className={styles.chatSection} id="chat">
+        <div className={styles.sectionHeaderCompact}>
+          <p className={styles.eyebrow}>Chat IA + Paloma</p>
+          <h2>Anamnese inteligente, 1 pergunta por vez</h2>
+          <p className={styles.sectionSubtitle}>
+            Conversa curta e focada: objetivo, lesões, rotina, tempo, equipamentos e sabotadores. IA coleta, Paloma revisa e envia o plano.
+          </p>
+        </div>
+        <div className={styles.chatLayout}>
+          <ChatSimulator />
         </div>
       </section>
 
@@ -274,8 +291,8 @@ export default function Home() {
           </p>
         </div>
         <div className={styles.footerActions}>
-          <a className={styles.primary} href="#plans">
-            Ver planos
+          <a className={styles.primary} href="#chat">
+            Comecar anamnese
           </a>
         </div>
       </footer>
